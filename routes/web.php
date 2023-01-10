@@ -20,7 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index']);
-Route::get('/company-create', [App\Http\Controllers\CompanyController::class, 'create']);
-Route::post('/company-store', [App\Http\Controllers\CompanyController::class, 'store']);
+Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.list');
+Route::get('/company-list', [App\Http\Controllers\CompanyController::class, 'getCompany']);
+Route::get('/company-create', [App\Http\Controllers\CompanyController::class, 'create'])->name('company.create');
+Route::get('/company-edit', [App\Http\Controllers\CompanyController::class, 'edit'])->name('company.edit');
+Route::post('/company/store', [App\Http\Controllers\CompanyController::class, 'store']);
+Route::post('/company/delete', [App\Http\Controllers\CompanyController::class, 'destroy'])->name('company.delete');
 

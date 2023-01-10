@@ -11,7 +11,8 @@
    </div>
    @endif
 
-   <form method="POST" action="{{ url('user/create') }}">
+   <h4 class="card-title">Create Company</h4>
+   <form method="POST" action="{{ url('company/store') }}" enctype="multipart/form-data">
 
        {{ csrf_field() }}
 
@@ -22,17 +23,8 @@
                <span class="text-danger">{{ $errors->first('name') }}</span>
            @endif
        </div>
-
        <div class="form-group">
-           <label>Password:</label>
-           <input type="password" name="password" class="form-control" placeholder="Password">
-           @if ($errors->has('password'))
-               <span class="text-danger">{{ $errors->first('password') }}</span>
-           @endif
-       </div>
-
-       <div class="form-group">
-           <strong>Email:</strong>
+           <label>Email:</label>
            <input type="text" name="email" class="form-control" placeholder="Email">
            @if ($errors->has('email'))
                <span class="text-danger">{{ $errors->first('email') }}</span>
@@ -40,8 +32,27 @@
        </div>
 
        <div class="form-group">
-           <button class="btn btn-success btn-submit">Submit</button>
+           <label>Website:</label>
+           <input type="text" name="website" class="form-control" placeholder="website">
+           @if ($errors->has('website'))
+               <span class="text-danger">{{ $errors->first('website') }}</span>
+           @endif
        </div>
+       <div class="form-group">
+           <label>Logo:</label>
+           <input type="file" name="logo" class="form-control" placeholder="logo">
+           @if ($errors->has('logo'))
+               <span class="text-danger">{{ $errors->first('logo') }}</span>
+           @endif
+       </div>
+
+
+       <div class="form-group mt-2">
+           <button class="btn btn-success btn-submit">Submit</button>
+           <a href="{{route('company.list')}}" class="btn btn-success btn-submit">Back</a>
+       </div>
+       <!-- <div class="form-group mt-2">
+       </div> -->
    </form>
 
 
