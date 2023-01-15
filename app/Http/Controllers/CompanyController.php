@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Http\Requests\StoreCompany;
+use Image;
+use File;
+use Session;
 
 class CompanyController extends Controller
 {
@@ -23,8 +26,9 @@ class CompanyController extends Controller
         $company = Company::all();
         return datatables()->of($company)
             ->addColumn('image', function($image) {
-                if (isset($image->imageLink)){
-                    return '<img src="'.url('public/categoryImage/'.$image->imageLink).'" border="0" width="40" class="img-rounded" align="center" />';
+                if (isset($image->logo)){
+                    // dd($image);
+                    return '<img src="'.url('/companyImage/'.$image->logo).'" border="0" width="40" class="img-rounded" align="center" />';
                 }else{
                     return 'No image';
                 }
@@ -57,11 +61,43 @@ class CompanyController extends Controller
     {
         $input = $request->all();
         if($id == 0){
-            $company = Company::create($input);
-            return  back()->with('success', 'company created successfully.');
-        }else{
+            // $company = Company::create($input);
+            $company = new Company();
+            $company->name = $request->name;
+            $company->email = $request->email;
+            $company->website = $request->website;
+            $company->save();
+            
+            if ($request->hasFile('logo')) {
+                $originalName = $request->logo->getClientOriginalName();
+                $uniqueImageName =  $company->name.$originalName;
+                $image = Image::make($request->logo);
+            $image->save(public_path().'/companyImage/'.$uniqueImageName);
+            $company->logo = $uniqueImageName;
+            $company->save();
+        }
+        return  back()->with('success', 'company created successfully.');
+    }else{
+            // dd($input);
+
             $company = Company::where('id',$id)->first();
-            $company->update($input);
+            $company->name = $request->name;
+            $company->email = $request->email;
+            $company->website = $request->website;
+            $company->save();
+            
+            if ($request->hasFile('logo')) {
+                if(isset($company->logo)){
+                    $file_path = public_path() . '/companyImage/' . $company->logo;
+                    File::delete($file_path);
+                }
+                $originalName = $request->logo->getClientOriginalName();
+                $uniqueImageName =  $company->name.$originalName;
+                $image = Image::make($request->logo);
+            $image->save(public_path().'/companyImage/'.$uniqueImageName);
+            $company->logo = $uniqueImageName;
+            $company->save();
+        }
             return  back()->with('success', 'company update successfully.');
 
         }
@@ -86,7 +122,8 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $company = Company::where('id',$id)->first();
+        return view('company.edit',compact('company'));
     }
 
     /**
@@ -107,8 +144,19 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        // dd($request->all());
+        // $product = C::where('productId', $request->productId)->first();
+        $company = Company::where('id',$request->companyId)->first();
+        // dd($company);
+        if(isset($company->logo)){
+            $file_path = public_path() . '/companyImage/' . $company->logo;
+            File::delete($file_path);
+        }
+        $company->delete();
+        return response()->json();
+
+     
     }
 }

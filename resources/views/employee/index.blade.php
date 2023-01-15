@@ -13,12 +13,12 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">All Company</h4>
+                                    <h4 class="card-title">All Employee</h4>
                                     <a class="heading-elements-toggle"><i
                                             class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                        <li><a href="{{ route('company.create') }}" class="btn btn-info"><i class="ft-plus"></i>Create New</a></li>
+                                        <li><a href="{{ route('employee.create') }}" class="btn btn-info"><i class="ft-plus"></i>Create New</a></li>
                                             <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                             <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                             <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -29,7 +29,7 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
                                         <div class="table table-responsive">
-                                            <table id="companyTable"
+                                            <table id="employeeTable"
                                                    class="table table-striped table-bordered nowrap">
                                             </table>
                                         </div>
@@ -49,13 +49,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
  <script>
     $(document).ready(function () {
-            $('#companyTable').DataTable({
+            $('#employeeTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('company-list') }}",
                 columns: [
+                    // {title: 'Category ID', data: 'categoryId', name: 'categoryId', className: "text-center", orderable: true, searchable: true},
                     {title: 'Image', data: 'image', name: 'image', className: "text-center", orderable: false, searchable: false},
                     {title: 'Company Name', data: 'name', name: 'name', className: "text-center", orderable: true, searchable: true},
+                    // {title: 'Status', data: 'homeShow', name: 'homeShow', className: "text-center", orderable: true, searchable: true},
+                    // { title:'Parent', data: 'parentName', name: 'parent',className: "text-center", orderable: true, searchable:true},
+                    // {title: 'Created', data: 'created_at', name: 'created_at', className: "text-center", orderable: true, searchable: true},
+                    // {title: 'Updated', data: 'updated_at', name: 'updated_at', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
                             return '<a title="edit" class="btn btn-warning btn-sm" data-panel-id="' + data.id + '" onclick="editCompany(this)"><i class="fa fa-edit"></i></a>'+
                                 ' <a title="delete" class="btn btn-danger btn-sm" data-panel-id="' + data.id + '" onclick="deleteCompany(this)"><i class="fa-solid fa-trash"></i></a>'
@@ -85,7 +90,7 @@
                 cache: false,
                 data: {_token: "{{csrf_token()}}",'companyId': companyId},
                 success: function (data) {
-                    $('#companyTable').DataTable().clear().draw();
+                    $('#employeeTable').DataTable().clear().draw();
                 }
             });
         }

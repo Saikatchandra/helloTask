@@ -25,6 +25,7 @@ class StoreCompany extends FormRequest
     {
         return [
             'name' => 'required',
+            'image' => 'mimes:jpeg,jpg,png,gif' 
         ];
     }
 }
